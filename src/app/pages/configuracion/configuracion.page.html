@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-fab-button size="small" color="success">
+                <ion-icon name="menu"></ion-icon>
+                <ion-menu-button menu="first"> </ion-menu-button>
+            </ion-fab-button>
+        </ion-buttons>
+        <ion-title text-capitalize>
+            Hola
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item *ngFor="let item of items">
+            <ion-icon [name]="item.icon" slot="start"></ion-icon>
+            {{ item.title }}
+            <div class="item-note" slot="end">
+                {{ item.note }}
+            </div>
+        </ion-item>
+    </ion-list>
+</ion-content>

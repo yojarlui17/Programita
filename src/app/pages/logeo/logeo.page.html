@@ -1,0 +1,29 @@
+<ion-content>
+    <div class="login-content">
+        <!-- Login form -->
+        <form class="list-form">
+            <ion-item>
+                <ion-label float color="success">
+                    <ion-icon name="mail" item-start class="text-primary"></ion-icon>
+                    <small>Email</small>
+                </ion-label>
+                <ion-input type="email" [(ngModel)]="id" name="correo"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label floating color="success">
+                    <ion-icon name="lock" item-start class="text-primary"></ion-icon>
+                    <small>Password</small>
+                </ion-label>
+                <ion-input type="password" [(ngModel)]="pass" name="password"></ion-input>
+            </ion-item>
+        </form>
+        <p text-left ion-text tappable></p>
+    </div>
+    <div>
+        <ion-button color="success" float-right (click)="login()">
+            <ion-icon name="log-in"></ion-icon>
+            Entrar
+        </ion-button>
+    </div>
+</ion-content>
