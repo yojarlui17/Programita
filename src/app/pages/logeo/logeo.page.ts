@@ -28,10 +28,7 @@ export class LogeoPage implements OnInit {
     this.driver.login(cuenta).subscribe(r => {
       this.conductor = r;
       console.log(this.conductor);
-      if (
-        this.conductor["apellido"] != "" &&
-        this.conductor["apellido"] != null
-      ) {
+      if (this.conductor["nombre_completo"] != " ") {
         console.log("ok");
         this.validarTurno();
       } else {
