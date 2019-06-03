@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DriverService } from "../../services/driver/driver.service";
 import { DatePipe } from "@angular/common";
 import { Router } from "@angular/router";
+import { AlertController } from "@ionic/angular";
 
 @Component({
   selector: "app-logeo",
@@ -15,7 +16,8 @@ export class LogeoPage implements OnInit {
   constructor(
     private driver: DriverService,
     public datepipe: DatePipe,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
   ) {}
 
   login() {
@@ -26,11 +28,18 @@ export class LogeoPage implements OnInit {
     this.driver.login(cuenta).subscribe(r => {
       this.conductor = r;
       console.log(this.conductor);
-      if (this.conductor["nombre_completo"] != null) {
+      if (
+        this.conductor["apellido"] != "" &&
+        this.conductor["apellido"] != null
+      ) {
         console.log("ok");
         this.validarTurno();
       } else {
-        console.log("atras papu");
+        this.mensaje(
+          "Error de Autenticacion",
+          "Contraseña y/o correo son invalidos"
+        );
+        console.log("atras");
       }
     });
   }
@@ -48,13 +57,24 @@ export class LogeoPage implements OnInit {
       console.log(h);
       console.log(horario);
       if (h == true) {
-        console.log("adelante papu");
+        console.log("adelante");
         this.goConductor();
       } else {
-        console.log("a dormir papu");
+        this.mensaje("Fuera de Turno", " 👴🏻 Usted se encuentra fuera de turno");
+        console.log("a dormir");
       }
     });
   }
 
   ngOnInit() {}
+
+  async mensaje(m: string, t: string) {
+    const alert = await this.alertController.create({
+      header: "Alert",
+      subHeader: m,
+      message: t,
+      buttons: ["OK"]
+    });
+    await alert.present();
+  }
 }
