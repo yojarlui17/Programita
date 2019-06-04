@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { Platform } from "@ionic/angular";
 import { ActivatedRoute } from "@angular/router";
+import { mapChildrenIntoArray } from "@angular/router/src/url_tree";
 
 /* import { filter } from "rxjs/operators"; */
 declare var google;
@@ -31,9 +32,12 @@ export class InicioPage implements OnInit {
     this.image = {
       url: "../../../assets/google-maps/auto.png"
     };
+    /* this.map.setCenter(new google.maps.LatLng(this.lat, this.lng)); */
     setInterval(() => {
+      this.marker.setMap(null);
+      this.map.setCenter(this.marker.getPosition());
       this.getLocation();
-    }, 300);
+    }, 200);
   }
 
   ngOnInit() {
@@ -43,7 +47,6 @@ export class InicioPage implements OnInit {
         this.driver = params.driver;
         console.log(this.driver);
       }); */
-
     console.log("hep", this.driver);
   }
 

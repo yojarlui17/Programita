@@ -1,29 +1,54 @@
-<ion-content>
-    <div class="login-content">
-        <!-- Login form -->
-        <form class="list-form">
-            <ion-item>
-                <ion-label float color="success">
-                    <ion-icon name="mail" item-start class="text-primary"></ion-icon>
-                    <small>Email</small>
-                </ion-label>
-                <ion-input type="email" [(ngModel)]="id" name="correo"></ion-input>
-            </ion-item>
+<ion-header no-border color="dark">
+    <ion-toolbar color="dark">
+        <ion-title text-center>
+            <ion-icon name="lock"></ion-icon>
+            Iniciar sesión
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content no-border color="dark">
+    <ion-card color="dark">
+        <ion-card-content>
+            <div class="login-content">
+                <form class="list-form">
+                    <ion-item color="dark">
+                        <ion-label position="floating" color="success">
+                            <ion-icon name="mail" item-start class="text-primary"></ion-icon>
+                            <small>Email</small>
+                        </ion-label>
+                        <ion-input type="email" [(ngModel)]="id" name="correo"></ion-input>
+                    </ion-item>
 
-            <ion-item>
-                <ion-label floating color="success">
-                    <ion-icon name="lock" item-start class="text-primary"></ion-icon>
-                    <small>Password</small>
-                </ion-label>
-                <ion-input type="password" [(ngModel)]="pass" name="password"></ion-input>
-            </ion-item>
-        </form>
-        <p text-left ion-text tappable></p>
-    </div>
-    <div>
-        <ion-button color="success" float-right (click)="login()">
-            <ion-icon name="log-in"></ion-icon>
-            Entrar
-        </ion-button>
-    </div>
+                    <ion-item color="dark">
+                        <ion-label position="floating" color="success">
+                            <ion-icon name="lock" item-start class="text-primary"></ion-icon>
+                            <small>Password</small>
+                        </ion-label>
+                        <ion-input type="password" [(ngModel)]="pass" name="password"></ion-input>
+                    </ion-item>
+                </form>
+                <p text-left ion-text tappable></p>
+            </div>
+            <div>
+                <ion-button color="success" float-right (click)="login()" [ngClass]="{'class': inesable,'class2':!inesable}">
+                    <!-- class="btnProp" *ngIf="btnProp" -->
+                    <ion-icon name="log-in"></ion-icon>
+                    Entrar
+                </ion-button>
+            </div>
+            <div class="loading" *ngIf="loading">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <ion-badge color="success">Cargando...</ion-badge>
+                <br>
+                <br>
+                <ion-progress-bar type="indeterminate" color="success"></ion-progress-bar>
+                <br>
+                <ion-progress-bar type="indeterminate" reversed="true" color="success"></ion-progress-bar>
+            </div>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

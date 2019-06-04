@@ -3,6 +3,7 @@ import { DriverService } from "../../services/driver/driver.service";
 import { DatePipe } from "@angular/common";
 import { Router } from "@angular/router";
 import { AlertController } from "@ionic/angular";
+import { identifierModuleUrl } from "@angular/compiler";
 
 @Component({
   selector: "app-logeo",
@@ -12,6 +13,8 @@ export class LogeoPage implements OnInit {
   id: string;
   pass: string;
   conductor: any;
+  inesable = true;
+  loading = false;
 
   constructor(
     private driver: DriverService,
@@ -21,6 +24,7 @@ export class LogeoPage implements OnInit {
   ) {}
 
   login() {
+    this.loading = true;
     let cuenta = {
       correo: this.id,
       clave: this.pass
@@ -36,6 +40,7 @@ export class LogeoPage implements OnInit {
           "Error de Autenticacion",
           "Contraseña y/o correo son invalidos"
         );
+        this.loading = false;
         console.log("atras");
       }
     });
@@ -58,17 +63,15 @@ export class LogeoPage implements OnInit {
         this.goConductor();
       } else {
         this.mensaje("Fuera de Turno", " 👴🏻 Usted se encuentra fuera de turno");
+        this.loading = false;
         console.log("a dormir");
       }
     });
   }
-
   ngOnInit() {}
-
-  async mensaje(m: string, t: string) {
+  async mensaje(h: string, t: string) {
     const alert = await this.alertController.create({
-      header: "Alert",
-      subHeader: m,
+      header: h,
       message: t,
       buttons: ["OK"]
     });
