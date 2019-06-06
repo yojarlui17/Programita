@@ -6,6 +6,11 @@
 </ion-buttons>
 <ion-content>
     <div #map id="map"></div>
+    <ion-fab id="confirmacion" horizontal="start" edge slot="fixed">
+        <ion-fab-button color="success" type="button" (click)="enfoque()">
+            <ion-icon name="locate" color="dark"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
     <div id="infoConductor">
         <ion-card class="p-0">
             <ion-card-content id="card-content">

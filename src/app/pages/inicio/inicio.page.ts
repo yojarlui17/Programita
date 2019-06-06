@@ -35,7 +35,6 @@ export class InicioPage implements OnInit {
     /* this.map.setCenter(new google.maps.LatLng(this.lat, this.lng)); */
     setInterval(() => {
       this.marker.setMap(null);
-      this.map.setCenter(this.marker.getPosition());
       this.getLocation();
     }, 200);
   }
@@ -49,9 +48,12 @@ export class InicioPage implements OnInit {
       }); */
     console.log("hep", this.driver);
   }
+  enfoque() {
+    this.map.setCenter(this.marker.getPosition());
+  }
 
   getLocation() {
-    console.log("hola :3");
+    /* console.log("hola :3"); */
     this.geolocation
       .getCurrentPosition({
         maximumAge: 1000,
@@ -62,7 +64,7 @@ export class InicioPage implements OnInit {
         resp => {
           this.lat = resp.coords.latitude;
           this.lng = resp.coords.longitude;
-          console.log(this.lat, this.lng);
+          /* console.log(this.lat, this.lng); */
         },
         er => {
           console.log("ERROR", er);
