@@ -1,8 +1,8 @@
 import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { Platform } from "@ionic/angular";
+import { Platform, PopoverController } from "@ionic/angular";
 import { ActivatedRoute } from "@angular/router";
-import { mapChildrenIntoArray } from "@angular/router/src/url_tree";
+import { PoplistaservicioComponent } from "../../components/poplistaservicio/poplistaservicio.component";
 
 /* import { filter } from "rxjs/operators"; */
 declare var google;
@@ -22,6 +22,7 @@ export class InicioPage implements OnInit {
   constructor(
     private geolocation: Geolocation,
     private plt: Platform,
+    public popoverController: PopoverController,
     private activatedRoute: ActivatedRoute /* ,
     public filter: filter */
   ) {
@@ -48,6 +49,27 @@ export class InicioPage implements OnInit {
       }); */
     console.log("hep", this.driver);
   }
+
+  /*  /////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////// */
+  //METODO LISTAR SERVICIO{
+  async listServices(event) {
+    const popover = await this.popoverController.create({
+      component: PoplistaservicioComponent,
+      event,
+      mode: "ios",
+      backdropDismiss: false
+    });
+    await popover.present();
+    //ESTE ESPERA A QUE EL POP SE CIERRE PARA FUNCIONAR
+    /* const { data } = await popover.onDidDismiss(); */
+
+    //ESTE FUNCIONA DE INMEDIATO
+    const { data } = await popover.onWillDismiss();
+    console.log("Padre: ", data);
+  }
+
+  //FIN DE METODOS}
   enfoque() {
     this.map.setCenter(this.marker.getPosition());
   }

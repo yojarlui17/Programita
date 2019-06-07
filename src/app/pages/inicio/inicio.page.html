@@ -6,9 +6,9 @@
 </ion-buttons>
 <ion-content>
     <div #map id="map"></div>
-    <ion-fab id="confirmacion" horizontal="start" edge slot="fixed">
-        <ion-fab-button color="success" type="button" (click)="enfoque()">
-            <ion-icon name="locate" color="dark"></ion-icon>
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+        <ion-fab-button size="small" color="success" (click)="listServices($event)">
+            <ion-icon color="dark" name="logo-model-s"></ion-icon>
         </ion-fab-button>
     </ion-fab>
     <div id="infoConductor">
@@ -28,5 +28,10 @@
                 </ion-item>
             </ion-card-content>
         </ion-card>
+        <ion-fab id="confirmacion" horizontal="start" edge slot="fixed">
+            <ion-fab-button color="success" type="button" (click)="enfoque()">
+                <ion-icon name="locate" color="dark"></ion-icon>
+            </ion-fab-button>
+        </ion-fab>
     </div>
 </ion-content>

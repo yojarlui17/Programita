@@ -13,6 +13,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { HttpClientModule } from "@angular/common/http";
 import { DatePipe } from "@angular/common";
+import { ComponentsModule } from "./components/components.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +22,8 @@ import { DatePipe } from "@angular/common";
     BrowserModule,
     HttpClientModule,
     IonicModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    ComponentsModule
   ],
   providers: [
     Geolocation,
