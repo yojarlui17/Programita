@@ -3,6 +3,7 @@ import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { Platform, PopoverController } from "@ionic/angular";
 import { ActivatedRoute } from "@angular/router";
 import { PoplistaservicioComponent } from "../../components/poplistaservicio/poplistaservicio.component";
+import { isDefaultChangeDetectionStrategy } from "@angular/core/src/change_detection/constants";
 
 /* import { filter } from "rxjs/operators"; */
 declare var google;
@@ -12,6 +13,11 @@ declare var google;
   styleUrls: ["inicio.page.scss"]
 })
 export class InicioPage implements OnInit {
+  idservicio: any;
+  idconductor: any;
+  idauto: any;
+  tipoauto: any;
+  fecservicio: any;
   lat: number = 0;
   driver: any;
   lng: number = 0;
@@ -53,7 +59,7 @@ export class InicioPage implements OnInit {
   /*  /////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////// */
   //METODO LISTAR SERVICIO{
-  async listServices(event) {
+  async listarServices(event) {
     const popover = await this.popoverController.create({
       component: PoplistaservicioComponent,
       event,
@@ -73,7 +79,21 @@ export class InicioPage implements OnInit {
   enfoque() {
     this.map.setCenter(this.marker.getPosition());
   }
-
+  aceptarservicio() {
+    /* this.idservicio= ;
+    this.idconductor= ;
+    this.idauto= ;
+    this.tipoauto= ;
+    this.fecservicio= ; */
+    let data = {
+      id_servicio: "",
+      id_conductor: "44",
+      id_auto: "35",
+      tipo_auto: "2",
+      fecha_servicio: ""
+    };
+    this.driver.acceptService(data).suscribe();
+  }
   getLocation() {
     /* console.log("hola :3"); */
     this.geolocation

@@ -6,13 +6,13 @@ import { DataconectionService } from "../conection/dataconection.service";
 })
 export class DriverServiceService {
   constructor(private data: DataconectionService) {}
-  listOfPendingServices() {
+  getlistOfPendingServices() {
     return this.data.get("api/servicio/ListaPendientes");
   }
-  /* acceptService() {
-    return this.data.post("api/servicio/aceptar");
+  acceptService() {
+    return this.data.post("api/servicio/aceptar", this.data);
   }
-  finishService() {
+  /* finishService() {
     return this.data.post("api/servicio/terminar");
   }
   additional() {

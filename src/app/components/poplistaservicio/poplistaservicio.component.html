@@ -1,5 +1,10 @@
 <ion-list>
-    <ion-item *ngFor="let servico of servicios;let i = index;" detail (click)="onClick(i+1)">
-        <ion-label> Servico {{i+1}}</ion-label>
+    <ion-item *ngFor="let servicio of serviciopendiente" detail (click)="selectServicio(servicio)">
+        <ion-label> {{servicio.zonaFinal}}</ion-label>
+        <!-- <small>Destino: {{servicio.zonaFina}}</small> -->
     </ion-item>
+    <!-- <ion-item *ngFor="let servicio of serviciopendiente;" detail (click)="listService()">
+        <ion-label>Inicio: {{servicio.zonaInicio}}</ion-label>
+        <small>Destino: {{servicio.zonaFina}}</small>
+    </ion-item> -->
 </ion-list>
