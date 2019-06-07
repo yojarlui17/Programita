@@ -3,8 +3,6 @@ import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { Platform, PopoverController } from "@ionic/angular";
 import { ActivatedRoute } from "@angular/router";
 import { PoplistaservicioComponent } from "../../components/poplistaservicio/poplistaservicio.component";
-import { isDefaultChangeDetectionStrategy } from "@angular/core/src/change_detection/constants";
-
 /* import { filter } from "rxjs/operators"; */
 declare var google;
 @Component({
@@ -18,6 +16,7 @@ export class InicioPage implements OnInit {
   idauto: any;
   tipoauto: any;
   fecservicio: any;
+  servicio: any;
   lat: number = 0;
   driver: any;
   lng: number = 0;
@@ -72,7 +71,10 @@ export class InicioPage implements OnInit {
 
     //ESTE FUNCIONA DE INMEDIATO
     const { data } = await popover.onWillDismiss();
+    this.servicio = data;
     console.log("Padre: ", data);
+    /* this.aceptarservicio();
+    console.log(this.aceptarservicio()); */
   }
 
   //FIN DE METODOS}
@@ -80,17 +82,17 @@ export class InicioPage implements OnInit {
     this.map.setCenter(this.marker.getPosition());
   }
   aceptarservicio() {
-    /* this.idservicio= ;
-    this.idconductor= ;
-    this.idauto= ;
-    this.tipoauto= ;
-    this.fecservicio= ; */
+    this.idservicio = this.servicio.id;
+    this.idconductor = this.driver.id;
+    this.idauto = this.driver.id_auto;
+    this.tipoauto = this.driver.tipo_auto;
+    this.fecservicio = this.servicio.fecha_servicio;
     let data = {
-      id_servicio: "",
-      id_conductor: "44",
-      id_auto: "35",
-      tipo_auto: "2",
-      fecha_servicio: ""
+      id: this.idservicio,
+      id_conductor: 44,
+      id_auto: 35,
+      tipo_auto: 2,
+      fecha_servicio: this.fecservicio
     };
     this.driver.acceptService(data).suscribe();
   }
