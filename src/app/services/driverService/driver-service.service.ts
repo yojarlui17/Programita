@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { DataconectionService } from "../conection/dataconection.service";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -21,10 +22,10 @@ export class DriverServiceService {
   additional() {
     return this.data.post("api/servicio/adicional", this.data);
   }
-  finalRate() {
-    return this.data.get("api/servicio/tarifa_final" + this.data);
+  finalRate(datita) {
+    return this.data.post("api/servicio/tarifa_final", datita);
   }
-  recoverService() {
-    return this.data.get("api/servicio/recuperar" + this.data);
+  recoverService(datita) {
+    return this.data.post("api/servicio/recuperar", datita);
   }
 }

@@ -10,6 +10,7 @@ import { DriverServiceService } from "../../services/driverService/driver-servic
 export class PoplistaservicioComponent implements OnInit {
   servicio: any;
   public serviciopendiente: any;
+  idservicio: any;
   estadoAlerta: number = 0;
 
   constructor(
@@ -51,7 +52,6 @@ export class PoplistaservicioComponent implements OnInit {
       servicio: this.servicio
     });
   }
-
   mostrarServicio() {
     console.log("estadoServicio", this.serviciopendiente.estado);
     if (this.serviciopendiente.estado == 1 && this.estadoAlerta == 0) {
@@ -70,7 +70,8 @@ export class PoplistaservicioComponent implements OnInit {
             text: "Aceptar",
             handler: data => {
               this.estadoAlerta = 1;
-              /* this.aceptarServicio(); */
+              this.idservicio = this.servicio.id_servicio;
+              console.log(this.idservicio);
             }
           }
         ]

@@ -68,6 +68,7 @@ export class LogeoPage implements OnInit {
       }
     });
   }
+
   ngOnInit() {}
   async mensaje(h: string, t: string) {
     const alert = await this.alertController.create({
