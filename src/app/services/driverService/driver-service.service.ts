@@ -10,17 +10,17 @@ export class DriverServiceService {
   getlistOfPendingServices() {
     return this.data.get("api/servicio/ListaPendientes");
   }
-  acceptService() {
-    return this.data.post("api/servicio/aceptar", this.data);
+  acceptService(datita) {
+    return this.data.post("api/servicio/aceptar", datita);
   }
-  onRoute() {
-    return this.data.post("api/servicio/enruta", this.data);
+  onRoute(datita) {
+    return this.data.post("api/servicio/enruta", datita);
   }
-  finishService() {
-    return this.data.post("api/servicio/terminar", this.data);
+  finishService(datita) {
+    return this.data.post("api/servicio/terminar", datita);
   }
-  additional() {
-    return this.data.post("api/servicio/adicional", this.data);
+  additional(datita) {
+    return this.data.post("api/servicio/adicional", datita);
   }
   finalRate(datita) {
     return this.data.post("api/servicio/tarifa_final", datita);

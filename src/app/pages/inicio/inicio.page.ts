@@ -5,6 +5,8 @@ import { ActivatedRoute } from "@angular/router";
 import { PoplistaservicioComponent } from "../../components/poplistaservicio/poplistaservicio.component";
 /* import { filter } from "rxjs/operators"; */
 import { DriverServiceService } from "../../services/driverService/driver-service.service";
+import { randomBytes } from "crypto";
+import { DatePipe } from "@angular/common";
 declare var google;
 //
 // Author: Yojar Ruiz Rey
@@ -26,6 +28,7 @@ export class InicioPage implements OnInit {
   fecservicio: any;
   servicio: any;
   servicio3: any;
+  servicio2: any;
   i: any;
   driver: any;
   lat: number = -12.04318;
@@ -42,6 +45,7 @@ export class InicioPage implements OnInit {
     private plt: Platform,
     private popoverController: PopoverController,
     private alertController: AlertController,
+    private datepipe: DatePipe,
     private driverServiceService: DriverServiceService,
     private activatedRoute: ActivatedRoute /* ,
     public filter: filter */
@@ -72,8 +76,8 @@ export class InicioPage implements OnInit {
     /* this.tarifaFinal(); */
     /* this.enfoque(); */
     /* this.recuperarServicio(); */
-    this.listService();
-    this.ini();
+    /* this.mostrarServicio();
+    this.listService(); */
   }
 
   /*  /////////////////////////////////////////////////////////////////////////////////
@@ -92,8 +96,9 @@ export class InicioPage implements OnInit {
 
     //ESTE FUNCIONA DE INMEDIATO
     const { data } = await popover.onWillDismiss();
-    this.servicio = data;
-    console.log("Padre: ", data);
+    this.servicio2 = data;
+    console.log("Padre: SERVICIO2", this.servicio2);
+    this.aceptarservicio();
     /* this.aceptarservicio();
     console.log(this.aceptarservicio()); */
   }
@@ -119,7 +124,7 @@ export class InicioPage implements OnInit {
 
   ini() {
     this.i = setInterval(() => {
-      this.mostrarServicio();
+      this.listService();
     }, 5000);
   }
 
@@ -168,13 +173,15 @@ export class InicioPage implements OnInit {
   enfoque() {
     this.map.setCenter(this.marker.getPosition());
   }
-
   aceptarservicio() {
-    this.idservicio = this.servicio.id;
-    this.idconductor = this.driver.id;
-    this.idauto = this.driver.id_auto;
-    this.tipoauto = this.driver.tipo_auto;
-    this.fecservicio = this.servicio.fecha_servicio;
+    this.idservicio = this.servicio2.servicio.id;
+    this.idconductor = parseInt(this.driver.id);
+    this.idauto = parseInt(this.driver.id_auto);
+    this.tipoauto = parseInt(this.driver.tipo_auto);
+    this.fecservicio = this.datepipe.transform(
+      Date.now(),
+      "yyyy-MM-dd hh:mm:ss"
+    );
     let data = {
       id: this.idservicio,
       id_conductor: this.idconductor,
@@ -182,7 +189,8 @@ export class InicioPage implements OnInit {
       tipo_auto: this.tipoauto,
       fecha_servicio: this.fecservicio
     };
-    this.driver.acceptService(data).suscribe();
+    console.log("SE ENVIAN ESTOS DATOS:", data);
+    this.driverServiceService.acceptService(data).subscribe();
   }
   enRuta() {
     this.idservicio = this.servicio.id;
@@ -286,8 +294,26 @@ export class InicioPage implements OnInit {
     this.idestado = this.serviciopendiente.id_estado;
     if (this.idestado == 1 && this.estadoAlerta == 0) {
       console.log("si entre");
-
-      this.message(
+      this.alertController.create({
+        header: "Hola, " + this.driver.nombre,
+        message: "Hay un servicio de S/." + this.serviciopendiente.totalTarifa,
+        buttons: [
+          {
+            text: "OK",
+            role: "ok",
+            handler: () => {
+              console.log("Id Servicio: ", this.serviciopendiente.id);
+              this.estadoAlerta = 1;
+              clearInterval(this.i);
+              this.estadoAlerta = 1;
+              this.estadoConductor = "B";
+              console.log(this.estadoConductor);
+              this.aceptarservicio();
+            }
+          }
+        ]
+      });
+      /* this.message(
         `Hola, ${this.driver.nombre}`,
         `Hay un servicio de S/. ${this.serviciopendiente.totalTarifa}`,
         "OK",
@@ -297,31 +323,8 @@ export class InicioPage implements OnInit {
           this.serviciopendiente.id
         )};${(this.estadoAlerta = 1)};${clearInterval(this.i)};`,
         `${(this.estadoAlerta = 1)};${(this.estadoConductor =
-          "B")};${console.log(this.estadoConductor)};`
-      );
-      /* this.alertController.create({
-        header: `Hola, ${this.driver.nombre} `,
-        message: "Hay una servicio de S/." + this.serviciopendiente.precio,
-        buttons: [
-          {
-            text: "Cancelar",
-            handler: data => {
-              this.estadoAlerta = 1;
-              //this.cancelarServicio();
-            }
-          },
-          {
-            text: "Aceptar",
-            handler: data => {
-              this.estadoAlerta = 1;
-              this.idservicio = this.servicio.id_servicio;
-              console.log(this.idservicio);
-            }
-          }
-        ]
-      });
-      this.estadoAlerta = 1;
-    } */
+          "B")};${console.log(this.estadoConductor)};this.aceptarservicio();`
+      ); */
     } else {
       console.log("estamos tan cerca... pero tan lejos");
     }
@@ -330,7 +333,7 @@ export class InicioPage implements OnInit {
     this.driverServiceService
       .getlistOfPendingServices()
       .subscribe(resultado => {
-        this.serviciopendiente = resultado[11];
+        this.serviciopendiente = resultado[0];
         console.log("Resultado_verServicio", this.serviciopendiente);
         if (this.serviciopendiente.id_servicio == 0) {
           console.log("No hay carreras");
