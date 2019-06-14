@@ -14,6 +14,11 @@
     <div id="infoConductor">
         <ion-card class="p-0">
             <ion-card-content id="card-content">
+                <ion-chip *ngIf="p==5">
+                    <ion-icon name="nuclear" color="dark"></ion-icon>
+                    <ion-label color="danger">Terminar Carrera </ion-label>
+                    <ion-icon name="jet" color="dark"></ion-icon>
+                </ion-chip>
                 <ion-item color="success">
                     <ion-icon name="contact" slot="start"></ion-icon>
                     <ion-label>Conductor : {{driver.nombre_completo}} </ion-label>

@@ -26,9 +26,10 @@ export class InicioPage implements OnInit {
   idauto: any;
   tipoauto: any;
   fecservicio: any;
-  servicio: any;
-  servicio3: any;
+  /* servicio: any;
+  servicio3: any; */
   servicio2: any;
+  p: number = 0;
   i: any;
   driver: any;
   lat: number = -12.04318;
@@ -116,16 +117,10 @@ export class InicioPage implements OnInit {
 
     //ESTE FUNCIONA DE INMEDIATO
     const { data } = await popover.onWillDismiss();
-    this.servicio = data;
+    this.servicio2 = data;
     console.log("Padre: ", data);
     /* this.aceptarservicio();
     console.log(this.aceptarservicio()); */
-  }
-
-  ini() {
-    this.i = setInterval(() => {
-      this.listService();
-    }, 5000);
   }
 
   async add() {
@@ -191,20 +186,93 @@ export class InicioPage implements OnInit {
     };
     console.log("SE ENVIAN ESTOS DATOS:", data);
     this.driverServiceService.acceptService(data).subscribe();
+    this.ini();
+  }
+  empezarCarrera() {
+    console.log("ESTADO EN NUMERO: ", this.servicio2.id_estado);
+    if (this.servicio2.id_estado === 3) {
+      console.log("SE INICIA CON LA RUTA ESTADO3");
+      this.AceptInRuta();
+    } else {
+      console.log("AUN NO ACEPTA EL CLIENTE");
+    }
+  }
+  ini() {
+    this.i = setInterval(() => {
+      this.recuperarServicio();
+    }, 3000);
+  }
+  recuperarServicio() {
+    console.log("ESTADO ANTES DEL IF:", this.servicio2);
+    let d = {
+      id: this.idservicio
+    }; /* this.idservicio */
+    console.log("DATOS PARA RECUPERAR SERVICIO", d);
+    this.driverServiceService.recoverService(d).subscribe(res => {
+      this.servicio2 = res;
+      console.log("ESTADO ES: ", this.servicio2);
+      if (
+        this.servicio2.id_estado < 3 ||
+        this.servicio2.id_estado === undefined
+      ) {
+        console.log(" NO SE CONFIRMA");
+      } else {
+        console.log("SE RECUPERA");
+        this.mRecSer();
+      }
+    });
+  }
+  async mRecSer() {
+    clearInterval(this.i);
+    const alert = await this.alertController.create({
+      header: "Servicio Recuperado",
+      message: `Se recupero el Siguiente servicio:${this.servicio2.id}`,
+      buttons: [
+        {
+          text: "ACEPTAR",
+          handler: () => {
+            this.empezarCarrera();
+          }
+        }
+      ]
+    });
+    await alert.present();
+    console.log("SE TIENE ESTE SERVICIO", this.servicio2.id);
+  }
+  async AceptInRuta() {
+    const alert = await this.alertController.create({
+      header: "ATENCION!",
+      message: `Empezar el estado "EN RUTA"
+         Lugar de destino: ${this.servicio2.direccionDestino}`,
+      buttons: [
+        {
+          text: "Aceptar",
+          handler: () => {
+            console.log("INICIADO RUTA PARA", this.servicio2.usuario.nombre);
+            this.enRuta();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
   enRuta() {
-    this.idservicio = this.servicio.id;
+    this.idservicio = this.servicio2.id;
     let data = {
       id: this.idservicio
     };
-    this.driver.onRoute(data).suscribe();
+    this.driverServiceService.onRoute(data).subscribe();
+    console.log("RUTA ACTIVADA");
+    /* this.terminar(); */
   }
+
   terminar() {
-    this.idservicio = this.servicio.id;
+    this.p = 5;
+    this.idservicio = this.servicio2.id;
     let data = {
       id: this.idservicio
     };
-    this.driver.finishService(data).suscribe();
+    this.driverServiceService.finishService(data).subscribe();
     this.adicionales();
   }
   async adicionales() {
@@ -222,19 +290,19 @@ export class InicioPage implements OnInit {
     } else {
       this.peaje = false;
     }
-    this.idservicio = this.servicio.id;
+    this.idservicio = this.servicio2.id;
     let d = {
       id: this.idservicio,
       aire: this.aire,
       peaje: this.peaje
     };
     console.log(d);
-    this.driver.onRoute(d).suscribe();
+    this.driverServiceService.additional(d).subscribe();
   }
 
   tarifaFinal() {
     let d = {
-      id: 22
+      id: this.idservicio
     }; /* this.idservicio */
     console.log(d);
     this.driverServiceService.finalRate(d).subscribe(res => {
@@ -254,41 +322,8 @@ export class InicioPage implements OnInit {
     });
     await alert.present();
   }
-  recuperarServicio() {
-    let d = {
-      id: 16
-    };
-    console.log(d);
-    this.driverServiceService.recoverService(d).subscribe(res => {
-      this.servicio3 = res;
-      console.log(this.servicio3);
-      this.mRecSer(res);
-    });
-  }
-  async mRecSer(p) {
-    const alert = await this.alertController.create({
-      header: "Servicio Recuperado",
-      message: `Se recupero el Siguiente servicio:${p}`,
-      buttons: ["ACEPTAR"]
-    });
-    await alert.present();
-  }
+
   //
-  async message(h: string, m: string, b: any, tb: any, metodo: any, call: any) {
-    b = {
-      text: tb,
-      handler: data => {
-        metodo;
-      }
-    };
-    const alert = await this.alertController.create({
-      header: h,
-      message: m,
-      buttons: [b]
-    });
-    await alert.present();
-    call;
-  }
   mostrarServicio() {
     console.log("estadoServicio", this.serviciopendiente.id_estado);
     this.idestado = this.serviciopendiente.id_estado;
@@ -313,18 +348,6 @@ export class InicioPage implements OnInit {
           }
         ]
       });
-      /* this.message(
-        `Hola, ${this.driver.nombre}`,
-        `Hay un servicio de S/. ${this.serviciopendiente.totalTarifa}`,
-        "OK",
-        "OK",
-        `${console.log(
-          "Id Servicio: ",
-          this.serviciopendiente.id
-        )};${(this.estadoAlerta = 1)};${clearInterval(this.i)};`,
-        `${(this.estadoAlerta = 1)};${(this.estadoConductor =
-          "B")};${console.log(this.estadoConductor)};this.aceptarservicio();`
-      ); */
     } else {
       console.log("estamos tan cerca... pero tan lejos");
     }
@@ -346,9 +369,9 @@ export class InicioPage implements OnInit {
   }
   selectServicio(elemento) {
     console.log("seleccionado", elemento);
-    this.servicio = elemento;
+    this.servicio2 = elemento;
     this.popoverController.dismiss({
-      servicio: this.servicio
+      servicio: this.servicio2
     });
   }
   getLocation() {
