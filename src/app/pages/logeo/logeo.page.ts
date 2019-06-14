@@ -62,7 +62,7 @@ export class LogeoPage implements OnInit {
         console.log("adelante");
         this.goConductor();
       } else {
-        this.mensaje("Fuera de Turno", " 👴🏻 Usted se encuentra fuera de turno");
+        this.mensaje("Fuera de Turno", " Usted se encuentra fuera de turno");
         this.loading = false;
         console.log("a dormir");
       }

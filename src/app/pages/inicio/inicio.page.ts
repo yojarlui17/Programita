@@ -79,6 +79,7 @@ export class InicioPage implements OnInit {
     /* this.recuperarServicio(); */
     /* this.mostrarServicio();
     this.listService(); */
+    /* this.tarifaFinal(); */
   }
 
   /*  /////////////////////////////////////////////////////////////////////////////////
@@ -154,6 +155,7 @@ export class InicioPage implements OnInit {
         {
           text: "Ok",
           handler: () => {
+            this.tarifaFinal();
             console.log("Confirm Ok");
           }
         }
@@ -263,11 +265,12 @@ export class InicioPage implements OnInit {
     };
     this.driverServiceService.onRoute(data).subscribe();
     console.log("RUTA ACTIVADA");
-    /* this.terminar(); */
-  }
-
-  terminar() {
     this.p = 5;
+  }
+  funciona() {
+    console.log("FUNCIONA!");
+  }
+  terminar() {
     this.idservicio = this.servicio2.id;
     let data = {
       id: this.idservicio
@@ -293,11 +296,12 @@ export class InicioPage implements OnInit {
     this.idservicio = this.servicio2.id;
     let d = {
       id: this.idservicio,
-      aire: this.aire,
-      peaje: this.peaje
+      _aire: this.aire,
+      _peaje: this.peaje
     };
     console.log(d);
     this.driverServiceService.additional(d).subscribe();
+    this.tarifaFinal();
   }
 
   tarifaFinal() {
@@ -306,7 +310,7 @@ export class InicioPage implements OnInit {
     }; /* this.idservicio */
     console.log(d);
     this.driverServiceService.finalRate(d).subscribe(res => {
-      console.log(res);
+      console.log("PRECIO FINAL", res);
       this.mtarfin(res);
     });
     /* console.log(
