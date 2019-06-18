@@ -11,6 +11,7 @@ import { PoplistaservicioComponent } from "../../components/poplistaservicio/pop
 /* import { filter } from "rxjs/operators"; */
 import { DriverServiceService } from "../../services/driverService/driver-service.service";
 import { DatePipe } from "@angular/common";
+import { mapChildrenIntoArray } from "@angular/router/src/url_tree";
 declare var google;
 //
 // Author: Yojar Ruiz Rey
@@ -22,6 +23,8 @@ declare var google;
 })
 export class InicioPage implements OnInit {
   adicional: any;
+  geocoder: any;
+  dirUsuario: any;
   idestado: any;
   aire: boolean;
   peaje: boolean;
@@ -30,8 +33,6 @@ export class InicioPage implements OnInit {
   idauto: any;
   tipoauto: any;
   fecservicio: any;
-  /* servicio: any;
-  servicio3: any; */
   servicio2: any;
   p: number = 0;
   i: any;
@@ -44,6 +45,7 @@ export class InicioPage implements OnInit {
   public serviciopendiente: any;
   estadoAlerta: number = 0;
   estadoConductor: any = "A";
+  directionService = new google.maps.DirectionsService();
   z: any = Array();
   marker: google.maps.Marker;
   constructor(
@@ -57,6 +59,7 @@ export class InicioPage implements OnInit {
     private activatedRoute: ActivatedRoute /* ,
     public filter: filter */
   ) {
+    this.geocoder = new google.maps.Geocoder();
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.driver = params["params"];
     });
@@ -268,7 +271,61 @@ export class InicioPage implements OnInit {
       }
     });
   }
-  /* dirigirse(){
+  dirlat: any;
+  dirlng: any;
+  directionsDisplay: any;
+  miUbi: any;
+  miPunto: any;
+  nombredepunto() {
+    this.miUbi = this.lat + "," + this.lng;
+    var latlng = { lat: this.lat, lng: this.lng };
+    this.geocoder.geocode({ location: latlng }, results => {
+      if (results[0]) {
+        this.miPunto = results[1].formatted_address;
+      }
+    });
+  }
+  dirigirseCliente() {
+    this.dirUsuario = this.servicio2.direccionOrigen;
+    console.log("ESTA ES LA DIRECCION DEL USUARIO", this.dirUsuario);
+    this.geocoder.geocode({ address: this.dirUsuario }, (results, status) => {
+      if (status == "OK") {
+        this.map.setCenter(results[0].geometry.location);
+        this.dirlat = results[0].geometry.viewport.na.j;
+        this.dirlng = results[0].geometry.viewport.ga.l;
+        this.ionViewDidEnter();
+        console.log("DIRECCION CONVERTIDA LAT: ", this.dirlat);
+        console.log("DIRECCION CONVERTIDA LNG: ", this.dirlng);
+      } else {
+        console.log(
+          "Geocodificación no fue exitosa por la siguiente razón",
+          status
+        );
+      }
+    });
+    let request = {
+      origin: this.map.getCenter(),
+      destination: this.dirUsuario,
+      travelMode: "DRIVING"
+    };
+    this.directionService.route(request, (result, status) => {
+      this.directionsDisplay = new google.maps.DirectionsRenderer();
+      /* this.nombredepunto(); */
+      if (status == "OK") {
+        this.directionsDisplay.setDirections(result);
+        this.directionsDisplay.setMap(this.map);
+        this.directionsDisplay.setOptions({
+          suppressMarkers: false,
+          polylineOptions: {
+            strokeColor: "#13937b"
+          }
+        });
+      } else {
+        console.log("ERROR");
+      }
+    });
+  }
+  /* dirigirseDestino(){
 
   } */
   async mRecSer() {
@@ -298,6 +355,7 @@ export class InicioPage implements OnInit {
           text: "Aceptar",
           handler: () => {
             console.log("INICIADO RUTA PARA", this.servicio2.usuario.nombre);
+            this.dirigirseCliente();
             this.enRuta();
           }
         }
