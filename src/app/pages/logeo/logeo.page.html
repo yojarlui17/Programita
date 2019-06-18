@@ -1,17 +1,18 @@
-<ion-header no-border color="dark">
-    <ion-toolbar color="dark">
+<ion-header no-border>
+    <ion-toolbar color="success">
         <ion-title text-center>
             <ion-icon name="lock"></ion-icon>
             Iniciar sesión
         </ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content no-border color="dark">
-    <ion-card color="dark">
+<ion-content no-border>
+    <img src="assets/imagenes/bigway.jpg" alt="logo">
+    <ion-card>
         <ion-card-content>
             <div class="login-content">
                 <form class="list-form">
-                    <ion-item color="dark">
+                    <ion-item>
                         <ion-label position="floating" color="success">
                             <ion-icon name="mail" item-start class="text-primary"></ion-icon>
                             <small>Email</small>
@@ -19,7 +20,7 @@
                         <ion-input type="email" [(ngModel)]="id" name="correo"></ion-input>
                     </ion-item>
 
-                    <ion-item color="dark">
+                    <ion-item>
                         <ion-label position="floating" color="success">
                             <ion-icon name="lock" item-start class="text-primary"></ion-icon>
                             <small>Password</small>

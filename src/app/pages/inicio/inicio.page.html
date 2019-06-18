@@ -1,12 +1,14 @@
-<ion-buttons slot="start" z-index>
-    <ion-fab-button size="small">
-        <ion-icon color="success" name="menu"></ion-icon>
-        <ion-menu-button menu="first"> </ion-menu-button>
-    </ion-fab-button>
-</ion-buttons>
 <ion-content>
     <div #map id="map"></div>
-    <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <!-- <ion-buttons slot="start" z-index> -->
+    <ion-fab slot="fixed" vertical="top" horizontal="start">
+        <ion-fab-button size="small" color="success">
+            <ion-icon name="menu"></ion-icon>
+            <ion-menu-button menu="first"> </ion-menu-button>
+        </ion-fab-button>
+    </ion-fab>
+    <!-- </ion-buttons> -->
+    <ion-fab vertical="top" horizontal="end" slot="fixed" *ngIf="z.length>0">
         <ion-fab-button size="small" color="success" (click)="listarServices($event)">
             <ion-icon color="dark" name="logo-model-s"></ion-icon>
         </ion-fab-button>

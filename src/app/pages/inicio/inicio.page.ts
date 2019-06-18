@@ -1,11 +1,15 @@
 import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { Platform, PopoverController, AlertController } from "@ionic/angular";
+import {
+  Platform,
+  PopoverController,
+  AlertController,
+  ToastController
+} from "@ionic/angular";
 import { ActivatedRoute } from "@angular/router";
 import { PoplistaservicioComponent } from "../../components/poplistaservicio/poplistaservicio.component";
 /* import { filter } from "rxjs/operators"; */
 import { DriverServiceService } from "../../services/driverService/driver-service.service";
-import { randomBytes } from "crypto";
 import { DatePipe } from "@angular/common";
 declare var google;
 //
@@ -40,6 +44,7 @@ export class InicioPage implements OnInit {
   public serviciopendiente: any;
   estadoAlerta: number = 0;
   estadoConductor: any = "A";
+  z: any = Array();
   marker: google.maps.Marker;
   constructor(
     private geolocation: Geolocation,
@@ -48,6 +53,7 @@ export class InicioPage implements OnInit {
     private alertController: AlertController,
     private datepipe: DatePipe,
     private driverServiceService: DriverServiceService,
+    private toastController: ToastController,
     private activatedRoute: ActivatedRoute /* ,
     public filter: filter */
   ) {
@@ -64,6 +70,10 @@ export class InicioPage implements OnInit {
       this.marker.setMap(null);
       this.getLocation();
     }, 200);
+    setInterval(() => {
+      console.log("FUNCIONO!");
+      this.numser();
+    }, 500);
   }
 
   ngOnInit() {
@@ -85,12 +95,46 @@ export class InicioPage implements OnInit {
   /*  /////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////// */
   //METODO LISTAR SERVICIO{
+  /* listService() {
+    this.driverServiceService
+      .getlistOfPendingServices()
+      .subscribe(resultado => {
+        this.serviciopendiente = resultado[0];
+        console.log("Resultado_verServicio", this.serviciopendiente);
+        if (this.serviciopendiente.id_servicio == 0) {
+          console.log("No hay carreras");
+        } else {
+          console.log("Hay carreras.");
+          console.log("Carreras: ", this.serviciopendiente);
+          this.mostrarServicio();
+        }
+      });
+  } */
+  numser() {
+    this.driverServiceService.getlistOfPendingServices().subscribe(r => {
+      if (this.z < r) {
+        this.z = r;
+        this.presentToast();
+      } else {
+        this.z = r;
+      }
+      console.log("Primera respues", r);
+      console.log("VALOR DE Z", this.z);
+    });
+  }
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: "Hay nuevos servicios.",
+      duration: 1000
+    });
+    toast.present();
+  }
   async listarServices(event) {
     const popover = await this.popoverController.create({
       component: PoplistaservicioComponent,
       event,
       mode: "ios",
-      backdropDismiss: false
+      backdropDismiss: true
     });
     await popover.present();
     //ESTE ESPERA A QUE EL POP SE CIERRE PARA FUNCIONAR
@@ -224,6 +268,9 @@ export class InicioPage implements OnInit {
       }
     });
   }
+  /* dirigirse(){
+
+  } */
   async mRecSer() {
     clearInterval(this.i);
     const alert = await this.alertController.create({
@@ -325,6 +372,7 @@ export class InicioPage implements OnInit {
       buttons: ["ACEPTAR"]
     });
     await alert.present();
+    this.p = 0;
   }
 
   //
@@ -355,21 +403,6 @@ export class InicioPage implements OnInit {
     } else {
       console.log("estamos tan cerca... pero tan lejos");
     }
-  }
-  listService() {
-    this.driverServiceService
-      .getlistOfPendingServices()
-      .subscribe(resultado => {
-        this.serviciopendiente = resultado[0];
-        console.log("Resultado_verServicio", this.serviciopendiente);
-        if (this.serviciopendiente.id_servicio == 0) {
-          console.log("No hay carreras");
-        } else {
-          console.log("Hay carreras.");
-          console.log("Carreras: ", this.serviciopendiente);
-          this.mostrarServicio();
-        }
-      });
   }
   selectServicio(elemento) {
     console.log("seleccionado", elemento);
