@@ -7,7 +7,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content no-border>
-    <img src="assets/imagenes/bigway.jpg" alt="logo">
+    <img src="assets/imagenes/bigway.jpg" alt="logo" />
     <ion-card>
         <ion-card-content>
             <div class="login-content">
@@ -31,23 +31,30 @@
                 <p text-left ion-text tappable></p>
             </div>
             <div>
-                <ion-button color="success" float-right (click)="login()" [ngClass]="{'class': inesable,'class2':!inesable}">
+                <ion-button color="success" float-right (click)="login()" [ngClass]="{ class: inesable, class2: !inesable }">
                     <!-- class="btnProp" *ngIf="btnProp" -->
                     <ion-icon name="log-in"></ion-icon>
                     Entrar
                 </ion-button>
             </div>
+            <!-- ION RANGE!!!! INICIO -->
+            <!-- <ion-item>
+                <ion-label>Inicio</ion-label>
+                <ion-range dualKnobs="false" min="1" max="4" step="1" snaps="true"></ion-range>
+                <ion-label>Terminado</ion-label>
+            </ion-item> -->
+            <!-- ION RANGE!!!! FIN -->
             <div class="loading" *ngIf="loading">
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
                 <ion-badge color="success">Cargando...</ion-badge>
-                <br>
-                <br>
+                <br />
+                <br />
                 <ion-progress-bar type="indeterminate" color="success"></ion-progress-bar>
-                <br>
+                <br />
                 <ion-progress-bar type="indeterminate" reversed="true" color="success"></ion-progress-bar>
             </div>
         </ion-card-content>

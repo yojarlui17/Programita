@@ -11,7 +11,6 @@ import { PoplistaservicioComponent } from "../../components/poplistaservicio/pop
 /* import { filter } from "rxjs/operators"; */
 import { DriverServiceService } from "../../services/driverService/driver-service.service";
 import { DatePipe } from "@angular/common";
-import { mapChildrenIntoArray } from "@angular/router/src/url_tree";
 declare var google;
 //
 // Author: Yojar Ruiz Rey
@@ -326,7 +325,7 @@ export class InicioPage implements OnInit {
     });
   }
   /* dirigirseDestino(){
-
+    this.dirUsuDes = this.servicio2.direccionDestino;
   } */
   async mRecSer() {
     clearInterval(this.i);
@@ -427,12 +426,19 @@ export class InicioPage implements OnInit {
     const alert = await this.alertController.create({
       header: "Tarifa Total",
       message: `La tarifa total del viaje es: S/. ${p}`,
-      buttons: ["ACEPTAR"]
+      buttons: [{
+        text: "Aceptar",
+        handler: () => {
+          this.clearMarkers();
+        }
+      }]
     });
     await alert.present();
     this.p = 0;
   }
-
+  clearMarkers() {
+    this.directionsDisplay.setMap(null);
+  }
   //
   mostrarServicio() {
     console.log("estadoServicio", this.serviciopendiente.id_estado);
